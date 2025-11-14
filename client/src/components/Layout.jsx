@@ -20,7 +20,29 @@ const Layout = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 500);
-  const [tasks, setTasks] = useState([
+  
+  // Load tasks from localStorage on initial render
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem('dontForgetTasks');
+    if (savedTasks) {
+      try {
+        return JSON.parse(savedTasks);
+      } catch (error) {
+        console.error('Error loading tasks from localStorage:', error);
+        return getDefaultTasks();
+      }
+    }
+    return getDefaultTasks();
+  });
+  
+  // Save tasks to localStorage whenever they change
+  React.useEffect(() => {
+    localStorage.setItem('dontForgetTasks', JSON.stringify(tasks));
+  }, [tasks]);
+  
+  // Default tasks function
+  function getDefaultTasks() {
+    return [
     {
       id: 1,
       name: 'Complete Project Proposal',
@@ -90,7 +112,8 @@ const Layout = () => {
       repeatDays: ['monday', 'tuesday', 'wednesday'],
       repeatMonths: ['january', 'june', 'december']
     }
-  ]);
+    ];
+  }
 
   const sectionFromPath = useMemo(() => {
     const parts = location.pathname.split('/').filter(Boolean);
