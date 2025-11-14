@@ -310,7 +310,7 @@ const AddTask = ({ tasks, setTasks }) => {
       <form onSubmit={handleSubmit} className="add-task-form">
         {/* Title (required) */}
         <div className="form-group full">
-          <label className="form-label required">Title</label>
+          <label className="form-label required">Title12</label>
           <input
             type="text"
             name="title"
