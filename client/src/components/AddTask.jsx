@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiPlus, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import './AddTask.css';
 
@@ -68,7 +69,8 @@ const YearlyOptions = ({ selectedDates, onDateSelect }) => {
   );
 };
 
-const AddTask = () => {
+const AddTask = ({ tasks, setTasks }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     invitee: '',
@@ -200,10 +202,16 @@ const AddTask = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Combine key points list into description
+    const description = keyPointsList.length > 0 
+      ? keyPointsList.map(point => `• ${point}`).join('\n')
+      : (formData.keyPoints || 'No description provided');
+    
     const newTask = {
       id: Date.now(),
       name: formData.title,
-      description: formData.keyPoints || 'No description provided',
+      description: description,
       dateTime: formData.dateTime,
       priority: formData.priority.toLowerCase().replace(' ', '-'),
       status: 'pending',
@@ -219,12 +227,20 @@ const AddTask = () => {
       followUpLink: formData.followUpLink,
       redirectUrl: formData.redirectUrl,
       bookingLimit: formData.bookingLimit,
-      reminder: formData.reminder
+      reminder: formData.reminder,
+      keyPoints: keyPointsList
     };
     
-    console.log('Task data:', newTask);
-    // Handle form submission - you can pass this to parent component
+    // Add new task to the tasks array
+    setTasks(prevTasks => [...prevTasks, newTask]);
+    
+    console.log('Task created successfully:', newTask);
+    
+    // Show success message
     alert('Task saved successfully!');
+    
+    // Navigate back to dashboard
+    navigate('/dashboard');
     
     // Reset form
     setFormData({
@@ -568,7 +584,7 @@ const AddTask = () => {
         {/* Save Task button */}
         <div className="form-actions">
           <button type="submit" className="save-btn">Save Task</button>
-          <button type="button" className="cancel-btn">Cancel</button>
+          <button type="button" className="cancel-btn" onClick={() => navigate('/dashboard')}>Cancel</button>
         </div>
       </form>
 
