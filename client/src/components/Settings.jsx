@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { FiSettings } from 'react-icons/fi';
+import IntegrationModal from './IntegrationModal';
 import './Settings.css';
 
 const SETTINGS_SECTIONS = [
@@ -29,15 +30,50 @@ const Settings = () => {
   const [branding, setBranding] = useState({ color: '#0e7a92', logo: '' });
   const [caps, setCaps] = useState({ daily: 3, weekly: 10, monthly: 40 });
   const [guest, setGuest] = useState({ link: '', username: '', passcode: '' });
+  const [selectedIntegration, setSelectedIntegration] = useState(null);
+  const [showIntegrationModal, setShowIntegrationModal] = useState(false);
+
+  // Load existing connections on mount
+  useEffect(() => {
+    const loadedConnections = {};
+    availableIntegrations.forEach(integration => {
+      const saved = localStorage.getItem(`integration_${integration.id}`);
+      if (saved) {
+        try {
+          loadedConnections[integration.id] = { connectedAt: new Date().toISOString(), hasCredentials: true };
+        } catch (e) {
+          console.error('Failed to load integration');
+        }
+      }
+    });
+    setConnections(loadedConnections);
+  }, []);
 
   const handleConnect = (id) => {
     const isConnected = !!connections[id];
     if (isConnected) {
-      setConnections({ ...connections, [id]: null });
+      // Disconnect - remove credentials
+      if (window.confirm('Are you sure you want to disconnect? Your API keys will be removed.')) {
+        localStorage.removeItem(`integration_${id}`);
+        setConnections({ ...connections, [id]: null });
+      }
     } else {
-      // Simulate OAuth/API key success
-      setConnections({ ...connections, [id]: { connectedAt: new Date().toISOString() } });
+      // Connect - open modal
+      const integration = availableIntegrations.find(i => i.id === id);
+      setSelectedIntegration(integration);
+      setShowIntegrationModal(true);
     }
+  };
+
+  const handleSaveIntegration = (integrationId, credentials) => {
+    setConnections({ ...connections, [integrationId]: { connectedAt: new Date().toISOString(), hasCredentials: true } });
+    setShowIntegrationModal(false);
+    setSelectedIntegration(null);
+  };
+
+  const handleCloseModal = () => {
+    setShowIntegrationModal(false);
+    setSelectedIntegration(null);
   };
 
   const handleGenerateGuestAccess = () => {
@@ -191,11 +227,17 @@ const Settings = () => {
           </div>
         )}
       </section>
+
+      {/* Integration Modal */}
+      {showIntegrationModal && selectedIntegration && (
+        <IntegrationModal
+          integration={selectedIntegration}
+          onClose={handleCloseModal}
+          onSave={handleSaveIntegration}
+        />
+      )}
     </div>
   );
 };
 
 export default Settings;
-
-
-
