@@ -1,11 +1,17 @@
 import React, { useState, useMemo } from 'react';
 import { FiBell, FiUser, FiClipboard, FiCalendar, FiClock, FiAlertTriangle, FiRefreshCw, FiAlertOctagon, FiSearch, FiFileText } from 'react-icons/fi';
 import TaskCard from './TaskCard';
+import ViewTaskModal from './ViewTaskModal';
+import EditTaskModal from './EditTaskModal';
 import './Dashboard.css';
 
 const Dashboard = ({ tasks, setTasks, onNavigate }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterPriority, setFilterPriority] = useState('all');
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState(null);
 
   const filteredTasks = useMemo(() => tasks.filter(task => {
     const matchesSearch = task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -15,17 +21,31 @@ const Dashboard = ({ tasks, setTasks, onNavigate }) => {
   }), [tasks, searchTerm, filterPriority]);
 
   const handleEditTask = (task) => {
-    console.log('Edit task:', task);
-    // Implement edit functionality
+    setSelectedTask(task);
+    setIsEditModalOpen(true);
   };
 
   const handleDeleteTask = (taskId) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      setTasks(tasks.filter(task => task.id !== taskId));
+    }
   };
 
   const handleViewTask = (task) => {
-    console.log('View task:', task);
-    // Implement view functionality
+    setSelectedTask(task);
+    setIsViewModalOpen(true);
+  };
+
+  const handleSaveEdit = (updatedTask) => {
+    setTasks(tasks.map(task => task.id === updatedTask.id ? updatedTask : task));
+    setIsEditModalOpen(false);
+    setSelectedTask(null);
+  };
+
+  const handleCloseModals = () => {
+    setIsViewModalOpen(false);
+    setIsEditModalOpen(false);
+    setSelectedTask(null);
   };
 
   const getTaskCounts = () => {
@@ -168,6 +188,21 @@ const Dashboard = ({ tasks, setTasks, onNavigate }) => {
         </div>
       </div>
 
+      {/* Modals */}
+      {isViewModalOpen && selectedTask && (
+        <ViewTaskModal
+          task={selectedTask}
+          onClose={handleCloseModals}
+        />
+      )}
+
+      {isEditModalOpen && selectedTask && (
+        <EditTaskModal
+          task={selectedTask}
+          onClose={handleCloseModals}
+          onSave={handleSaveEdit}
+        />
+      )}
     </div>
   );
 };
