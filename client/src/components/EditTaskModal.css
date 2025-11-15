@@ -4,10 +4,10 @@
   max-width: 800px;
   width: 100%;
   max-height: 90vh;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  overflow: visible;
 }
 
 .edit-task-modal .modal-header {
@@ -18,6 +18,33 @@
   align-items: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  flex-shrink: 0;
+}
+
+.edit-task-modal .modal-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+}
+
+.edit-task-modal .close-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.edit-task-modal .close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .edit-task-modal .modal-content {
