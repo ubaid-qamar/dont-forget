@@ -1,1249 +1,729 @@
-.add-task-container {
-  padding: 20px;
-  background: #FAFAFA;
-  min-height: auto;
-  position: relative;
-  transition: filter 0.3s ease;
-}
-
-.add-task-container.calendar-active {
-  filter: blur(2px);
-}
-
-.add-task-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  background: #F7F8FF;
-  padding: 14px 18px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px var(--shadow-light);
-  border-bottom: 2px solid #A9B8FF;
-}
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.add-icon {
-  width: 40px;
-  height: 40px;
-  background: #EDEFFF;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  color: var(--text-secondary);
-}
-
-.add-task-header h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--black);
-  margin: 0;
-}
-
-.back-link a {
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.back-link a:hover {
-  color: var(--lavender-pastel);
-}
-
-.add-task-form {
-  /* Light Lavender Pastel tint with soft white base */
-  background:
-    linear-gradient(180deg, rgba(169, 184, 255, 0.14), rgba(169, 184, 255, 0.06))
-    , #FFFFFF;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px var(--shadow-light);
-  border: 1px solid rgba(169, 184, 255, 0.45);
-  max-width: 860px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-label {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--black);
-  margin-bottom: 4px;
-  display: block;
-}
-
-.form-label.required::after {
-  content: " *";
-  color: var(--coral-orange);
-}
-
-.form-input,
-.form-select,
-.form-textarea {
-  padding: 12px 16px;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  font-size: 14px;
-  color: var(--black);
-  background: #ffffff;
-  transition: border-color 0.2s ease;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Responsive multi-column layout for larger screens */
-@media (min-width: 768px) {
-  .add-task-form {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1200px) {
-  .add-task-form {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-/* Make wide fields span full width when explicitly marked */
-.form-group.full {
-  grid-column: 1 / -1;
-}
-
-/* Ensure form actions align and span full row */
-.form-actions {
-  grid-column: 1 / -1;
-  display: flex;
-  gap: 12px;
-  justify-content: flex-end;
-  margin-top: 4px;
-}
-
-.form-input:focus,
-.form-select:focus,
-.form-textarea:focus {
-  outline: none;
-  border-color: #A9B8FF;
-  box-shadow: 0 0 0 3px rgba(169, 184, 255, 0.15);
-}
-
-.form-input::placeholder,
-.form-textarea::placeholder {
-  color: #999;
-}
-
-
-.key-points-container {
-  position: relative;
-}
-
-.key-points-input-container {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.key-points-input-container .form-input {
-  flex: 1;
-}
-
-.add-key-point-btn {
-  background: var(--coral-orange);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.add-key-point-btn:hover {
-  background: #e55a2b;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(255, 112, 67, 0.3);
-}
-
-
-.key-points-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.key-points-btn {
-  padding: 8px 16px;
-  border: 2px solid var(--border-color);
-  border-radius: 6px;
-  background: white;
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.key-points-btn:hover {
-  border-color: var(--lavender-pastel);
-  color: var(--lavender-pastel);
-}
-
-.key-points-btn.popup {
-  background: var(--coral-orange);
-  color: #ffffff;
-  border-color: var(--coral-orange);
-}
-
-.key-points-btn.popup:hover {
-  background: #e55a2b;
-  border-color: #e55a2b;
-}
-
-/* Key Points Side Panel */
-.key-points-side-panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 350px;
-  height: 100vh;
-  background: white;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  transform: translateX(100%);
-  animation: slideInRight 0.3s ease-out forwards;
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-/* Key Points Floating Window */
-.key-points-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  width: 500px;
-  max-height: 400px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  z-index: 1001;
-  display: flex;
-  flex-direction: column;
-  animation: popIn 0.3s ease-out forwards;
-  padding: 20px;
-  position: relative;
-}
-
-@keyframes popIn {
-  from {
-    transform: translate(-50%, -50%) scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-}
-
-/* Popup Overlay */
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.key-points-side-panel .panel-header {
-  border-radius: 0;
-}
-
-.key-points-popup .panel-header {
-  border-radius: 0;
-  border-bottom: 1px solid #e0e0e0;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-}
-
-.panel-header h3 {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--black);
-  margin: 0;
-}
-
-.close-panel,
-.close-popup {
-  background: none;
-  border: none;
-  font-size: 18px;
-  color: var(--text-secondary);
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
-
-.close-panel:hover,
-.close-popup:hover {
-  background: #f5f5f5;
-  color: var(--black);
-}
-
-.close-popup-top-right {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: var(--coral-orange);
-  color: white;
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  z-index: 10;
-}
-
-.close-popup-top-right:hover {
-  background: #e55a2b;
-}
-
-.panel-content {
-  flex: 1;
-  padding: 0;
-  overflow-y: auto;
-}
-
-.key-points-popup .panel-content {
-  padding: 0;
-  text-align: left;
-}
-
-.key-points-list {
-  list-style: none;
-  padding: 10px;
-  margin: 0;
-  text-align: left;
-}
-
-.key-points-list li {
-  padding: 12px 16px;
-  margin-bottom: 8px;
-  background: rgba(169, 184, 255, 0.14);
-  border-radius: 8px;
-  border-left: 4px solid #A9B8FF;
-  color: var(--black);
-  font-size: 14px;
-  line-height: 1.6;
-  transition: all 0.2s ease;
-  animation: slideInUp 0.3s ease-out;
-}
-
-.key-points-list li:nth-child(1) { animation-delay: 0.1s; }
-.key-points-list li:nth-child(2) { animation-delay: 0.2s; }
-.key-points-list li:nth-child(3) { animation-delay: 0.3s; }
-.key-points-list li:nth-child(4) { animation-delay: 0.4s; }
-.key-points-list li:nth-child(5) { animation-delay: 0.5s; }
-.key-points-list li:nth-child(n+6) { animation-delay: 0.6s; }
-
-.key-points-list li:hover {
-  background: rgba(169, 184, 255, 0.22);
-}
-
-.key-points-list li:last-child {
-  margin-bottom: 0;
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.no-points {
-  color: #999;
-  font-style: italic;
-  text-align: center;
-  margin: 40px 0;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border: 2px dashed #dee2e6;
-}
-
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--black);
-}
-
-.checkbox-input {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--lavender-pastel);
-}
-
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border-color);
-}
-
-.save-btn {
-  background: var(--coral-orange);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.save-btn:hover {
-  background: #e55a2b;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(255, 112, 67, 0.3);
-}
-
-.cancel-btn {
-  background: #f5f5f5;
-  color: var(--text-secondary);
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.cancel-btn:hover {
-  background: #e0e0e0;
-  color: var(--black);
-}
-
-
-/* Responsive Design */
-/* Ensure long text in cards wraps and doesn't overflow */
-.perk-card { min-width: 0; }
-.perk-title { word-break: break-word; }
-.perk-description { word-break: break-word; overflow-wrap: anywhere; }
-
-@media (max-width: 768px) {
-  .add-task-container {
-    margin-left: 0;
-    padding: 14px;
-  }
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FiPlus, FiX, FiChevronLeft, FiChevronRight, FiZap } from 'react-icons/fi';
+import { generateKeyPoints, suggestTaskPriority, isIntegrationConnected } from '../utils/integrations';
+import './AddTask.css';
+
+// Simple Yearly Options Component
+const YearlyOptions = ({ selectedDates, onDateSelect }) => {
+  const [newDate, setNewDate] = useState('');
   
-  .add-task-header {
-    padding: 12px 16px;
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
-  }
+  const handleAddDate = () => {
+    if (newDate && !selectedDates.includes(newDate)) {
+      onDateSelect(newDate);
+      setNewDate('');
+    }
+  };
   
-  .add-task-header h1 {
-    font-size: 18px;
-  }
+  const handleRemoveDate = (dateToRemove) => {
+    onDateSelect(dateToRemove);
+  };
   
-  .add-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
-  }
-  
-  .add-task-form {
-    padding: 16px;
-    max-width: 100%;
-  }
-  
-  .form-group {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
-  
-  .form-label {
-    font-size: 12px;
-    margin-bottom: 5px;
-  }
-  
-  .form-input,
-  .form-select,
-  .form-textarea {
-    padding: 8px 10px;
-    font-size: 13px;
-  }
-  
-  .form-actions {
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
-    padding-top: 16px;
-  }
-  
-  .save-btn,
-  .cancel-btn {
-    font-size: 13px;
-    padding: 8px 16px;
-  }
-  
-  .key-points-btn {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-  
-  .add-key-point-btn {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-  
-  .key-points-side-panel {
-    width: 100%;
-  }
-  
-  .key-points-popup {
-    width: 90%;
-    max-width: 500px;
-  }
-  
-  .checkbox-text {
-    font-size: 12px;
-  }
-}
+  return (
+    <div className="yearly-options">
+      <div className="form-group">
+        <label className="form-label">Select Specific Dates</label>
+        <div className="date-input-section">
+          <div className="button-row">
+            <button
+              type="button"
+              onClick={handleAddDate}
+              className="add-date-btn"
+              disabled={!newDate}
+            >
+              Add Date
+            </button>
+          </div>
+          
+          <div className="date-input-row">
+            <input
+              type="date"
+              value={newDate}
+              onChange={(e) => setNewDate(e.target.value)}
+              className="form-input"
+              placeholder="Select a date"
+            />
+          </div>
+          
+          {selectedDates.length > 0 && (
+            <div className="selected-dates">
+              <h4>Selected Dates:</h4>
+              <div className="date-tags">
+                {selectedDates.map((date, index) => (
+                  <span key={index} className="date-tag">
+                    {new Date(date).toLocaleDateString()}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveDate(date)}
+                      className="remove-date-btn"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-@media (max-width: 480px) {
-  .add-task-container {
-    padding: 12px;
-  }
-  
-  .add-task-header {
-    padding: 10px 12px;
-    gap: 10px;
-  }
-  
-  .add-task-header h1 {
-    font-size: 16px;
-  }
-  
-  .add-icon {
-    width: 28px;
-    height: 28px;
-    font-size: 14px;
-  }
-  
-  .add-task-form {
-    padding: 12px;
-  }
-  
-  .form-group {
-    margin-bottom: 12px;
-  }
-  
-  .form-label {
-    font-size: 11px;
-    margin-bottom: 4px;
-  }
-  
-  .form-input,
-  .form-select,
-  .form-textarea {
-    padding: 6px 8px;
-    font-size: 12px;
-  }
-  
-  .form-actions {
-    gap: 8px;
-    margin-top: 16px;
-    padding-top: 12px;
-  }
-  
-  .save-btn,
-  .cancel-btn {
-    font-size: 13px;
-    padding: 8px 14px;
-  }
-  
-  .key-points-actions {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .key-points-input-container {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .add-key-point-btn {
-    width: 100%;
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-  
-  .key-points-btn {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-  
-  .checkbox-text {
-    font-size: 11px;
-  }
-}
+const AddTask = ({ tasks, setTasks }) => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    title: '',
+    invitee: '',
+    taskType: 'Regular',
+    platform: 'Zoom',
+    meetingLink: '',
+    dateTime: '',
+    keyPoints: '',
+    repeat: 'None',
+    repeatDays: [],
+    repeatMonths: [],
+    yearlyDates: [],
+    priority: 'Medium',
+    tags: '',
+    followUpLink: '',
+    redirectUrl: '',
+    bookingLimit: '',
+    reminder: '15 minutes'
+  });
 
-/* Repeat Options Styles */
-.repeat-options-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 8px;
-  margin-top: 8px;
-}
+  const generateMeetingLink = (platform) => {
+    const token = Math.random().toString(36).slice(2, 10);
+    const meetingId = Math.floor(Math.random() * 900000000) + 100000000;
+    
+    if (platform === 'Zoom') {
+      // Generate Zoom-style meeting link
+      return `https://zoom.us/j/${meetingId}?pwd=${token}`;
+    } else if (platform === 'Google Meet') {
+      // Generate Google Meet-style meeting link
+      return `https://meet.google.com/${token.slice(0, 3)}-${token.slice(3, 6)}-${token.slice(6, 9)}`;
+    }
+    
+    // Fallback
+    return `https://meet.dontforget.app/${token}`;
+  };
 
-.repeat-option {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 14px;
-}
+  const [showKeyPointsPanel, setShowKeyPointsPanel] = useState(false);
+  const [showKeyPointsPopup, setShowKeyPointsPopup] = useState(false);
+  const [keyPointsList, setKeyPointsList] = useState([]);
+  const [currentKeyPoint, setCurrentKeyPoint] = useState('');
+  
+  // AI Features state
+  const [aiLoading, setAiLoading] = useState(false);
+  const isChatGPTConnected = isIntegrationConnected('chatgpt');
 
-.repeat-option:hover {
-  background: #e9ecef;
-  border-color: #A9B8FF;
-}
+  // AI Feature: Generate Key Points
+  const handleAIGenerateKeyPoints = async () => {
+    if (!formData.title.trim()) {
+      alert('Please enter a task title first!');
+      return;
+    }
 
-.repeat-option input[type="checkbox"] {
-  margin: 0;
-  accent-color: #A9B8FF;
-}
+    if (!isChatGPTConnected) {
+      alert('ChatGPT is not connected. Go to Settings → Integrations to connect.');
+      return;
+    }
 
-.repeat-option span {
-  user-select: none;
-  color: var(--black);
-  font-weight: 500;
-}
+    setAiLoading(true);
+    try {
+      const points = await generateKeyPoints(formData.title, '');
+      setKeyPointsList(points);
+      alert(`AI generated ${points.length} key points!`);
+    } catch (error) {
+      alert('AI Error: ' + error.message);
+      console.error('AI Error:', error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
-.repeat-option:has(input:checked) {
-  background: #EDEFFF;
-  border-color: #A9B8FF;
-  color: var(--black);
-}
+  // AI Feature: Suggest Priority
+  const handleAISuggestPriority = async () => {
+    if (!formData.title.trim()) {
+      alert('Please enter a task title first!');
+      return;
+    }
 
-.repeat-option:has(input:checked) span {
-  color: var(--black);
-  font-weight: 600;
-}
+    if (!isChatGPTConnected) {
+      alert('ChatGPT is not connected. Go to Settings → Integrations to connect.');
+      return;
+    }
+
+    setAiLoading(true);
+    try {
+      const result = await suggestTaskPriority(formData.title, '', formData.dateTime);
+      setFormData(prev => ({ ...prev, priority: result.priority }));
+      alert(`AI Recommendation: ${result.priority}\n\n${result.reasoning}`);
+    } catch (error) {
+      alert('AI Error: ' + error.message);
+      console.error('AI Error:', error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
 
-/* Yearly Options Container */
-.yearly-options-container {
-  width: 100%;
-  margin-top: 16px;
-  margin-bottom: 24px;
-}
-
-/* Yearly Options Styles */
-.yearly-options {
-  background: #ffffff;
-  border: 1px solid #e1e5e9;
-  border-radius: 12px;
-  padding: 20px;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-
-.date-input-section {
-  margin-top: 8px;
-}
-
-.button-row {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 12px;
-}
-
-.date-input-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-  padding: 16px;
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 10px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.date-input-row .form-input {
-  width: 100%;
-  max-width: 250px;
-  padding: 12px 16px;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  background: white;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.date-input-row .form-input:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-}
-
-button.add-date-btn,
-.add-date-btn {
-  padding: 12px 24px !important;
-  background: #ff6b35 !important;
-  background-color: #ff6b35 !important;
-  color: white !important;
-  border: none !important;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(255, 107, 53, 0.2);
-  min-width: 120px;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-button.add-date-btn:hover:not(:disabled),
-.add-date-btn:hover:not(:disabled) {
-  background: #e55a2b !important;
-  background-color: #e55a2b !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
-}
-
-.add-date-btn:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(255, 107, 53, 0.2);
-}
-
-.add-date-btn:disabled {
-  background: #6c757d;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.selected-dates h4 {
-  font-size: 14px;
-  font-weight: 600;
-  color: #495057;
-  margin: 0 0 12px 0;
-}
-
-.date-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.date-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: #e3f2fd;
-  color: #007bff;
-  border: 1px solid #007bff;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.remove-date-btn {
-  background: none;
-  border: none;
-  color: #007bff;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 0;
-  margin-left: 4px;
-  line-height: 1;
-}
-
-.remove-date-btn:hover {
-  color: #dc3545;
-}
-
-/* Days of Week Row */
-.days-row {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  margin-bottom: 20px;
-  width: 100%;
-  min-width: 400px;
-}
-
-.day-button {
-  padding: 8px 4px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: #f8f9fa;
-  color: #495057;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.day-button:hover {
-  background: #e9ecef;
-  border-color: #007bff;
-  color: #007bff;
-}
-
-.day-button.active {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
-  font-weight: 600;
-  z-index: 10;
-  position: relative;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-}
-
-/* Months Row */
-.months-row {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 8px;
-  margin-bottom: 24px;
-  width: 100%;
-  min-width: 400px;
-}
-
-.month-button {
-  padding: 8px 4px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: #f8f9fa;
-  color: #495057;
-  font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.month-button:hover {
-  background: #e9ecef;
-  border-color: #007bff;
-  color: #007bff;
-}
-
-.month-button.active {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
-  font-weight: 600;
-  z-index: 10;
-  position: relative;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-}
-
-/* Calendar Wrapper */
-.calendar-wrapper {
-  background: #f8f9fa;
-  border: 1px solid #e1e5e9;
-  border-radius: 8px;
-  padding: 20px;
-  width: 100%;
-  min-width: 400px;
-  box-sizing: border-box;
-}
-
-.calendar-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.nav-button {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #6c757d;
-}
-
-.nav-button:hover {
-  background: #e9ecef;
-  border-color: #007bff;
-  color: #007bff;
-}
-
-.current-month {
-  font-size: 16px;
-  font-weight: 600;
-  color: #212529;
-}
-
-.calendar-dates {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
-  width: 100%;
-  min-width: 400px;
-  box-sizing: border-box;
-}
-
-.day-label {
-  text-align: center;
-  font-size: 11px;
-  font-weight: 600;
-  color: #6c757d;
-  padding: 8px 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.date-button {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 28px;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  color: #495057;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.date-button.clickable:hover {
-  background: #e9ecef;
-  border-color: #007bff;
-  color: #007bff;
-}
-
-.date-button.active {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
-  font-weight: 600;
-  z-index: 10;
-  position: relative;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-}
-
-.date-button.empty {
-  cursor: default;
-  background: transparent;
-  border: none;
-  color: transparent;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .yearly-options-container {
-    margin-top: 12px;
-    margin-bottom: 20px;
-  }
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => {
+      const next = { ...prev, [name]: type === 'checkbox' ? checked : value };
+      
+      // Handle task type change
+      if (name === 'taskType') {
+        if (value === 'Video') {
+          // Generate meeting link when switching to Video type
+          next.meetingLink = generateMeetingLink(prev.platform);
+        } else {
+          // Clear meeting link and platform when switching away from Video
+          next.meetingLink = '';
+        }
+      }
+      
+      // Handle platform change - regenerate link with new platform
+      if (name === 'platform' && prev.taskType === 'Video') {
+        next.meetingLink = generateMeetingLink(value);
+      }
+      
+      // Handle date/time change - regenerate link to ensure it's fresh
+      if (name === 'dateTime' && prev.taskType === 'Video' && prev.platform) {
+        next.meetingLink = generateMeetingLink(prev.platform);
+      }
+      
+      // Handle repeat change - reset repeat options when changing repeat type
+      if (name === 'repeat') {
+        next.repeatDays = [];
+        next.repeatMonths = [];
+        next.yearlyDates = [];
+      }
+      
+      return next;
+    });
+  };
   
-  .minimal-calendar {
-    padding: 16px;
-  }
+  // Handle repeat day selection
+  const handleRepeatDayChange = (dayValue, checked) => {
+    setFormData(prev => {
+      const newDays = checked 
+        ? [...prev.repeatDays, dayValue]
+        : prev.repeatDays.filter(day => day !== dayValue);
+      return { ...prev, repeatDays: newDays };
+    });
+  };
   
-  .days-row {
-    gap: 6px;
-    min-width: 300px;
-  }
-  
-  .months-row {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-    min-width: 300px;
-  }
-  
-  .day-button, .month-button {
-    padding: 6px 3px;
-    font-size: 11px;
-    min-height: 28px;
-  }
-  
-  .date-button {
-    min-height: 28px;
-    font-size: 12px;
-  }
-  
-  .calendar-dates {
-    gap: 4px;
-    min-width: 300px;
-  }
-  
-  .calendar-wrapper {
-    padding: 16px;
-    min-width: 300px;
-  }
-}
+  // Handle repeat month selection
+  const handleRepeatMonthChange = (monthValue, checked) => {
+    setFormData(prev => {
+      const newMonths = checked 
+        ? [...prev.repeatMonths, monthValue]
+        : prev.repeatMonths.filter(month => month !== monthValue);
+      return { ...prev, repeatMonths: newMonths };
+    });
+  };
 
-@media (max-width: 480px) {
-  .yearly-options-container {
-    margin-top: 8px;
-    margin-bottom: 16px;
-  }
-  
-  .minimal-calendar {
-    padding: 12px;
-  }
-  
-  .days-row {
-    gap: 4px;
-    min-width: 250px;
-  }
-  
-  .months-row {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
-    min-width: 250px;
-  }
-  
-  .day-button, .month-button {
-    padding: 4px 2px;
-    font-size: 10px;
-    min-height: 24px;
-  }
-  
-  .date-button {
-    min-height: 24px;
-    font-size: 11px;
-  }
-  
-  .day-label {
-    font-size: 10px;
-    padding: 6px 2px;
-  }
-  
-  .calendar-dates {
-    gap: 3px;
-    min-width: 250px;
-  }
-  
-  .calendar-wrapper {
-    padding: 12px;
-    min-width: 250px;
-  }
-}
+  // Handle yearly date selection (toggle behavior for calendar)
+  const handleYearlyDateChange = (dateValue) => {
+    setFormData(prev => {
+      const isSelected = prev.yearlyDates.includes(dateValue);
+      const newDates = isSelected 
+        ? prev.yearlyDates.filter(date => date !== dateValue)
+        : [...prev.yearlyDates, dateValue];
+      return { ...prev, yearlyDates: newDates };
+    });
+  };
 
-/* Responsive Design for Yearly Options */
-@media (max-width: 768px) {
-  .yearly-options {
-    padding: 16px;
-  }
-  
-  .button-row {
-    justify-content: center;
-    margin-bottom: 16px;
-  }
-  
-  .date-input-row {
-    padding: 12px;
-  }
-  
-  .date-input-row .form-input {
-    max-width: 100%;
-  }
-  
-  .add-date-btn {
-    width: 100%;
-    max-width: 200px;
-    justify-content: center;
-  }
-}
+  const handleAddKeyPoint = () => {
+    if (currentKeyPoint.trim()) {
+      setKeyPointsList(prev => [...prev, currentKeyPoint.trim()]);
+      setCurrentKeyPoint('');
+    }
+  };
 
-@media (max-width: 600px) {
-  .button-row {
-    justify-content: center;
-  }
-  
-  .add-date-btn {
-    width: 100%;
-    max-width: 180px;
-  }
-}
+  const handleKeyPointInputChange = (e) => {
+    setCurrentKeyPoint(e.target.value);
+  };
 
-@media (max-width: 480px) {
-  .yearly-options {
-    padding: 12px;
-  }
-  
-  .button-row {
-    margin-bottom: 12px;
-  }
-  
-  .date-input-row {
-    padding: 10px;
-  }
-  
-  .add-date-btn {
-    padding: 10px 16px;
-    font-size: 13px;
-    width: 100%;
-    max-width: 160px;
-  }
-  
-  .date-tag {
-    font-size: 11px;
-    padding: 4px 8px;
-  }
-}
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddKeyPoint();
+    }
+  };
 
-.yearly-section {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 
-/* Responsive Design for Repeat Options */
-@media (max-width: 768px) {
-  .repeat-options-grid {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 6px;
-  }
-  
-  .repeat-option {
-    padding: 6px 10px;
-    font-size: 13px;
-  }
-  
-  .yearly-repeat-container {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  
-}
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Combine key points list into description
+    const description = keyPointsList.length > 0 
+      ? keyPointsList.map(point => `• ${point}`).join('\n')
+      : (formData.keyPoints || 'No description provided');
+    
+    const newTask = {
+      id: Date.now(),
+      name: formData.title,
+      description: description,
+      dateTime: formData.dateTime,
+      priority: formData.priority.toLowerCase().replace(' ', '-'),
+      status: 'pending',
+      repeat: formData.repeat,
+      repeatDays: formData.repeatDays,
+      repeatMonths: formData.repeatMonths,
+      yearlyDates: formData.yearlyDates,
+      invitee: formData.invitee,
+      taskType: formData.taskType,
+      platform: formData.platform,
+      meetingLink: formData.meetingLink,
+      tags: formData.tags,
+      followUpLink: formData.followUpLink,
+      redirectUrl: formData.redirectUrl,
+      bookingLimit: formData.bookingLimit,
+      reminder: formData.reminder,
+      keyPoints: keyPointsList
+    };
+    
+    // Add new task to the tasks array
+    setTasks(prevTasks => [...prevTasks, newTask]);
+    
+    console.log('Task created successfully:', newTask);
+    
+    // Show success message
+    alert('Task saved successfully!');
+    
+    // Navigate back to dashboard
+    navigate('/dashboard');
+    
+    // Reset form
+    setFormData({
+      title: '',
+      invitee: '',
+      taskType: 'Regular',
+      platform: 'Zoom',
+      meetingLink: '',
+      dateTime: '',
+      keyPoints: '',
+      repeat: 'None',
+      repeatDays: [],
+      repeatMonths: [],
+      yearlyDates: [],
+      priority: 'Medium',
+      tags: '',
+      followUpLink: '',
+      redirectUrl: '',
+      bookingLimit: '',
+      reminder: '15 minutes'
+    });
+    setKeyPointsList([]);
+  };
 
-@media (max-width: 480px) {
-  .repeat-options-grid {
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    gap: 4px;
-  }
+  const taskTypes = ['Regular', 'Video', 'Phone', 'Note'];
+  const repeatOptions = ['None', 'Daily', 'Weekly', 'Monthly', 'Yearly'];
+  const priorityOptions = ['Low', 'Medium', 'High', 'Urgent'];
+  const reminderOptions = ['5 minutes', '15 minutes', '30 minutes', '1 hour', '2 hours', '1 day'];
   
-  .repeat-option {
-    padding: 6px 8px;
-    font-size: 12px;
-  }
+  // Days of the week for weekly repeat
+  const daysOfWeek = [
+    { value: 'monday', label: 'Monday' },
+    { value: 'tuesday', label: 'Tuesday' },
+    { value: 'wednesday', label: 'Wednesday' },
+    { value: 'thursday', label: 'Thursday' },
+    { value: 'friday', label: 'Friday' },
+    { value: 'saturday', label: 'Saturday' },
+    { value: 'sunday', label: 'Sunday' }
+  ];
   
-  .yearly-repeat-container {
-    gap: 12px;
-  }
-  
-}
+  // Months for monthly/yearly repeat
+  const months = [
+    { value: 'january', label: 'January' },
+    { value: 'february', label: 'February' },
+    { value: 'march', label: 'March' },
+    { value: 'april', label: 'April' },
+    { value: 'may', label: 'May' },
+    { value: 'june', label: 'June' },
+    { value: 'july', label: 'July' },
+    { value: 'august', label: 'August' },
+    { value: 'september', label: 'September' },
+    { value: 'october', label: 'October' },
+    { value: 'november', label: 'November' },
+    { value: 'december', label: 'December' }
+  ];
+
+
+  return (
+    <div className="add-task-container">
+      <div className="add-task-header">
+        <div className="header-left">
+          <div className="add-icon"><FiPlus /></div>
+          <h1>Don't Forget To Create a Task</h1>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="add-task-form">
+        {/* Title (required) */}
+        <div className="form-group full">
+          <label className="form-label required">Title</label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            className="form-input"
+            placeholder="Task Title"
+            required
+          />
+        </div>
+
+        {/* Invitee (optional) */}
+        <div className="form-group">
+          <label className="form-label">Invitee</label>
+          <input
+            type="text"
+            name="invitee"
+            value={formData.invitee}
+            onChange={handleChange}
+            className="form-input"
+            placeholder="Invitee Name or Email"
+          />
+        </div>
+
+        {/* Task Type */}
+        <div className="form-group">
+          <label className="form-label">Task Type</label>
+          <select
+            name="taskType"
+            value={formData.taskType}
+            onChange={handleChange}
+            className="form-select"
+          >
+            {taskTypes.map(type => (
+              <option key={type} value={type}>{type}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Video Platform Selection - only show when Video is selected */}
+        {formData.taskType === 'Video' && (
+          <div className="form-group">
+            <label className="form-label">Video Platform</label>
+            <select
+              name="platform"
+              value={formData.platform}
+              onChange={handleChange}
+              className="form-select"
+            >
+              <option value="Zoom">Zoom</option>
+              <option value="Google Meet">Google Meet</option>
+            </select>
+          </div>
+        )}
+
+        {/* Auto-generated meeting link for Video */}
+        {formData.taskType === 'Video' && (
+          <div className="form-group">
+            <label className="form-label">Meeting Link (auto-generated)</label>
+            <input
+              type="text"
+              name="meetingLink"
+              value={formData.meetingLink || ''}
+              readOnly
+              className="form-input"
+              placeholder="Select platform and date/time to generate link..."
+            />
+          </div>
+        )}
+
+        {/* Date/Time picker */}
+        <div className="form-group">
+          <label className="form-label">Date & Time</label>
+          <input
+            type="datetime-local"
+            name="dateTime"
+            value={formData.dateTime}
+            onChange={handleChange}
+            className="form-input"
+            required
+          />
+        </div>
+
+        {/* Key Points (bullets) */}
+        <div className="form-group">
+          <label className="form-label">
+            Key Points
+            {isChatGPTConnected && (
+              <button
+                type="button"
+                className="ai-btn-inline"
+                onClick={handleAIGenerateKeyPoints}
+                disabled={aiLoading || !formData.title.trim()}
+                title="Use AI to generate key points"
+              >
+                <FiZap /> {aiLoading ? 'AI Thinking...' : 'AI Generate Key Points'}
+              </button>
+            )}
+          </label>
+          <div className="key-points-container">
+            <div className="key-points-input-container">
+              <input
+                type="text"
+                value={currentKeyPoint}
+                onChange={handleKeyPointInputChange}
+                onKeyPress={handleKeyPress}
+                className="form-input"
+                placeholder="Enter a key point"
+              />
+              <button
+                type="button"
+                className="add-key-point-btn"
+                onClick={handleAddKeyPoint}
+              >
+                Add Key Point
+              </button>
+            </div>
+            <div className="key-points-actions">
+              <button
+                type="button"
+                className="key-points-btn"
+                onClick={() => setShowKeyPointsPanel(!showKeyPointsPanel)}
+              >
+                Show Key Points
+              </button>
+              <button
+                type="button"
+                className="key-points-btn popup"
+                onClick={() => setShowKeyPointsPopup(!showKeyPointsPopup)}
+              >
+                Pop Out Key Points
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Repeat */}
+        <div className="form-group">
+          <label className="form-label">Repeat</label>
+          <select
+            name="repeat"
+            value={formData.repeat}
+            onChange={handleChange}
+            className="form-select"
+          >
+            {repeatOptions.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Weekly Repeat Options */}
+        {formData.repeat === 'Weekly' && (
+          <div className="form-group">
+            <label className="form-label">Select Days</label>
+            <div className="repeat-options-grid">
+              {daysOfWeek.map(day => (
+                <label key={day.value} className="repeat-option">
+                  <input
+                    type="checkbox"
+                    checked={formData.repeatDays.includes(day.value)}
+                    onChange={(e) => handleRepeatDayChange(day.value, e.target.checked)}
+                  />
+                  <span>{day.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Monthly Repeat Options */}
+        {formData.repeat === 'Monthly' && (
+          <div className="form-group">
+            <label className="form-label">Select Months</label>
+            <div className="repeat-options-grid">
+              {months.map(month => (
+                <label key={month.value} className="repeat-option">
+                  <input
+                    type="checkbox"
+                    checked={formData.repeatMonths.includes(month.value)}
+                    onChange={(e) => handleRepeatMonthChange(month.value, e.target.checked)}
+                  />
+                  <span>{month.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Yearly Repeat Options */}
+        {formData.repeat === 'Yearly' && (
+          <div className="yearly-options-container">
+            <YearlyOptions 
+              selectedDates={formData.yearlyDates}
+              onDateSelect={handleYearlyDateChange}
+            />
+          </div>
+        )}
+
+        {/* Priority */}
+        <div className="form-group">
+          <label className="form-label">
+            Priority
+            {isChatGPTConnected && (
+              <button
+                type="button"
+                className="ai-btn-inline"
+                onClick={handleAISuggestPriority}
+                disabled={aiLoading || !formData.title.trim()}
+                title="Use AI to suggest priority level"
+              >
+                <FiZap /> {aiLoading ? 'AI Thinking...' : 'AI Suggest Priority'}
+              </button>
+            )}
+          </label>
+          <select
+            name="priority"
+            value={formData.priority}
+            onChange={handleChange}
+            className="form-select"
+          >
+            {priorityOptions.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Tags */}
+        <div className="form-group">
+          <label className="form-label">Tags</label>
+          <input
+            type="text"
+            name="tags"
+            value={formData.tags}
+            onChange={handleChange}
+            className="form-input"
+            placeholder="Enter tags separated by commas"
+          />
+        </div>
+
+        {/* Follow-Up link (optional) */}
+        <div className="form-group">
+          <label className="form-label">Follow-Up Link</label>
+          <input
+            type="url"
+            name="followUpLink"
+            value={formData.followUpLink}
+            onChange={handleChange}
+            className="form-input"
+            placeholder="Optional follow-up link"
+          />
+        </div>
+
+        {/* Guest Access removed */}
+
+        {/* Redirect URL (optional) */}
+        <div className="form-group">
+          <label className="form-label">Redirect URL</label>
+          <input
+            type="url"
+            name="redirectUrl"
+            value={formData.redirectUrl}
+            onChange={handleChange}
+            className="form-input"
+            placeholder="Optional redirect URL"
+          />
+        </div>
+
+        {/* Booking Limit (optional) */}
+        <div className="form-group">
+          <label className="form-label">Booking Limit</label>
+          <input
+            type="number"
+            name="bookingLimit"
+            value={formData.bookingLimit}
+            onChange={handleChange}
+            className="form-input"
+            placeholder="Maximum number of bookings"
+          />
+        </div>
+
+        {/* Reminder */}
+        <div className="form-group">
+          <label className="form-label">Reminder</label>
+          <select
+            name="reminder"
+            value={formData.reminder}
+            onChange={handleChange}
+            className="form-select"
+          >
+            {reminderOptions.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Save Task button */}
+        <div className="form-actions">
+          <button type="submit" className="save-btn">Save Task</button>
+          <button type="button" className="cancel-btn" onClick={() => navigate('/dashboard')}>Cancel</button>
+        </div>
+      </form>
+
+      {/* Key Points Side Panel */}
+      {showKeyPointsPanel && (
+        <div className="key-points-side-panel">
+          <div className="panel-header">
+            <h3>Key Points</h3>
+            <button 
+              className="close-panel"
+              onClick={() => setShowKeyPointsPanel(false)}
+            >
+              <FiX />
+            </button>
+          </div>
+          <div className="panel-content">
+            {keyPointsList.length > 0 ? (
+              <ul className="key-points-list">
+                {keyPointsList.map((point, index) => (
+                  <li key={index}>• {point}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="no-points">No key points added yet</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Key Points Floating Window */}
+      {showKeyPointsPopup && (
+        <div className="popup-overlay" onClick={() => setShowKeyPointsPopup(false)}>
+          <div className="key-points-popup" onClick={(e) => e.stopPropagation()}>
+            <button 
+              className="close-popup-top-right"
+              onClick={() => setShowKeyPointsPopup(false)}
+            >
+              <FiX />
+            </button>
+            <div className="popup-header">
+              <h3>Key Points</h3>
+            </div>
+            <div className="popup-content">
+              {keyPointsList.length > 0 ? (
+                <ul className="key-points-list">
+                  {keyPointsList.map((point, index) => (
+                    <li key={index}>• {point}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="no-points">No key points added yet</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AddTask;
