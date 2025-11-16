@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiPlus, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiPlus, FiX, FiChevronLeft, FiChevronRight, FiZap } from 'react-icons/fi';
+import { generateKeyPoints, suggestTaskPriority, isIntegrationConnected } from '../utils/integrations';
 import './AddTask.css';
 
 // Simple Yearly Options Component
@@ -111,6 +112,60 @@ const AddTask = ({ tasks, setTasks }) => {
   const [showKeyPointsPopup, setShowKeyPointsPopup] = useState(false);
   const [keyPointsList, setKeyPointsList] = useState([]);
   const [currentKeyPoint, setCurrentKeyPoint] = useState('');
+  
+  // AI Features state
+  const [aiLoading, setAiLoading] = useState(false);
+  const isChatGPTConnected = isIntegrationConnected('chatgpt');
+
+  // AI Feature: Generate Key Points
+  const handleAIGenerateKeyPoints = async () => {
+    if (!formData.title.trim()) {
+      alert('Please enter a task title first!');
+      return;
+    }
+
+    if (!isChatGPTConnected) {
+      alert('ChatGPT is not connected. Go to Settings → Integrations to connect.');
+      return;
+    }
+
+    setAiLoading(true);
+    try {
+      const points = await generateKeyPoints(formData.title, '');
+      setKeyPointsList(points);
+      alert(`AI generated ${points.length} key points!`);
+    } catch (error) {
+      alert('AI Error: ' + error.message);
+      console.error('AI Error:', error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  // AI Feature: Suggest Priority
+  const handleAISuggestPriority = async () => {
+    if (!formData.title.trim()) {
+      alert('Please enter a task title first!');
+      return;
+    }
+
+    if (!isChatGPTConnected) {
+      alert('ChatGPT is not connected. Go to Settings → Integrations to connect.');
+      return;
+    }
+
+    setAiLoading(true);
+    try {
+      const result = await suggestTaskPriority(formData.title, '', formData.dateTime);
+      setFormData(prev => ({ ...prev, priority: result.priority }));
+      alert(`AI Recommendation: ${result.priority}\n\n${result.reasoning}`);
+    } catch (error) {
+      alert('AI Error: ' + error.message);
+      console.error('AI Error:', error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
 
   const handleChange = (e) => {
@@ -310,7 +365,7 @@ const AddTask = ({ tasks, setTasks }) => {
       <form onSubmit={handleSubmit} className="add-task-form">
         {/* Title (required) */}
         <div className="form-group full">
-          <label className="form-label required">Title12</label>
+          <label className="form-label required">Title</label>
           <input
             type="text"
             name="title"
@@ -396,7 +451,20 @@ const AddTask = ({ tasks, setTasks }) => {
 
         {/* Key Points (bullets) */}
         <div className="form-group">
-          <label className="form-label">Key Points</label>
+          <label className="form-label">
+            Key Points
+            {isChatGPTConnected && (
+              <button
+                type="button"
+                className="ai-btn-inline"
+                onClick={handleAIGenerateKeyPoints}
+                disabled={aiLoading || !formData.title.trim()}
+                title="Use AI to generate key points"
+              >
+                <FiZap /> {aiLoading ? 'AI Thinking...' : 'AI Generate Key Points'}
+              </button>
+            )}
+          </label>
           <div className="key-points-container">
             <div className="key-points-input-container">
               <input
@@ -499,7 +567,20 @@ const AddTask = ({ tasks, setTasks }) => {
 
         {/* Priority */}
         <div className="form-group">
-          <label className="form-label">Priority</label>
+          <label className="form-label">
+            Priority
+            {isChatGPTConnected && (
+              <button
+                type="button"
+                className="ai-btn-inline"
+                onClick={handleAISuggestPriority}
+                disabled={aiLoading || !formData.title.trim()}
+                title="Use AI to suggest priority level"
+              >
+                <FiZap /> {aiLoading ? 'AI Thinking...' : 'AI Suggest Priority'}
+              </button>
+            )}
+          </label>
           <select
             name="priority"
             value={formData.priority}
