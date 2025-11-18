@@ -191,9 +191,82 @@
   padding: 20px 24px;
   border-top: 1px solid #e0e0e0;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   gap: 12px;
   background: #f8f9fa;
+  flex-wrap: wrap;
+}
+
+.integration-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.integration-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.integration-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.zoom-btn {
+  background: linear-gradient(135deg, #2D8CFF 0%, #2563EB 100%);
+  color: white;
+}
+
+.zoom-btn:hover {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+}
+
+.meet-btn {
+  background: linear-gradient(135deg, #34A853 0%, #0F9D58 100%);
+  color: white;
+}
+
+.meet-btn:hover {
+  background: linear-gradient(135deg, #0F9D58 0%, #0D8043 100%);
+}
+
+.canva-btn {
+  background: linear-gradient(135deg, #00C4CC 0%, #7928CA 100%);
+  color: white;
+}
+
+.canva-btn:hover {
+  background: linear-gradient(135deg, #7928CA 0%, #FF0080 100%);
+}
+
+.stripe-btn {
+  background: linear-gradient(135deg, #635BFF 0%, #5469D4 100%);
+  color: white;
+}
+
+.stripe-btn:hover {
+  background: linear-gradient(135deg, #5469D4 0%, #4355C4 100%);
+}
+
+.paypal-btn {
+  background: linear-gradient(135deg, #0070BA 0%, #003087 100%);
+  color: white;
+}
+
+.paypal-btn:hover {
+  background: linear-gradient(135deg, #003087 0%, #001C64 100%);
 }
 
 .btn-secondary {
