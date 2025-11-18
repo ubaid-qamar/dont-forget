@@ -1,5 +1,6 @@
 import React from 'react';
-import { FiX, FiCalendar, FiClock, FiUser, FiVideo, FiPhone, FiFileText, FiTag, FiLink, FiRepeat, FiBell } from 'react-icons/fi';
+import { FiX, FiCalendar, FiClock, FiUser, FiVideo, FiPhone, FiFileText, FiTag, FiLink, FiRepeat, FiBell, FiExternalLink } from 'react-icons/fi';
+import { openZoomMeeting, openGoogleMeet, openCanva, requestStripePayment, requestPayPalPayment, isIntegrationConnected } from '../utils/integrations';
 import './ViewTaskModal.css';
 
 const ViewTaskModal = ({ task, onClose }) => {
@@ -199,6 +200,63 @@ const ViewTaskModal = ({ task, onClose }) => {
         </div>
 
         <div className="modal-footer">
+          <div className="integration-actions">
+            {/* Zoom Meeting Button */}
+            {task.taskType === 'Video' && task.platform === 'Zoom' && task.meetingLink && (
+              <button 
+                className="integration-btn zoom-btn"
+                onClick={() => openZoomMeeting(task.meetingLink)}
+                title="Join Zoom Meeting"
+              >
+                <FiVideo /> Join Zoom Meeting
+              </button>
+            )}
+
+            {/* Google Meet Button */}
+            {task.taskType === 'Video' && task.platform === 'Google Meet' && task.meetingLink && (
+              <button 
+                className="integration-btn meet-btn"
+                onClick={() => openGoogleMeet(task.meetingLink)}
+                title="Join Google Meet"
+              >
+                <FiVideo /> Join Google Meet
+              </button>
+            )}
+
+            {/* Canva Button */}
+            {isIntegrationConnected('canva') && (
+              <button 
+                className="integration-btn canva-btn"
+                onClick={() => openCanva(task.name)}
+                title="Open in Canva"
+              >
+                <FiExternalLink /> Design in Canva
+              </button>
+            )}
+
+            {/* Stripe Payment Button */}
+            {isIntegrationConnected('stripe') && (
+              <button 
+                className="integration-btn stripe-btn"
+                onClick={() => requestStripePayment(task)}
+                title="Request Payment via Stripe"
+              >
+                💳 Request Payment (Stripe)
+              </button>
+            )}
+
+            {/* PayPal Payment Button */}
+            {isIntegrationConnected('paypal') && (
+              <button 
+                className="integration-btn paypal-btn"
+                onClick={() => requestPayPalPayment(task)}
+                title="Request Payment via PayPal"
+              >
+                💰 Request Payment (PayPal)
+              </button>
+            )}
+          </div>
+
           <button className="btn-secondary" onClick={onClose}>Close</button>
         </div>
       </div>
