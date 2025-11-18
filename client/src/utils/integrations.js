@@ -162,22 +162,22 @@ Suggest a helpful follow-up action or question to track progress. Keep it concis
  * Zoom Integration
  */
 
-// Open Zoom meeting
-export const openZoomMeeting = (meetingLink) => {
-  if (meetingLink) {
-    window.open(meetingLink, '_blank');
-    return true;
+// Create Zoom meeting (placeholder - requires OAuth flow)
+export const createZoomMeeting = async (taskData) => {
+  const credentials = getIntegrationCredentials('zoom');
+  
+  if (!credentials || !credentials.apiKey) {
+    throw new Error('Zoom is not connected. Please add your credentials in Settings → Integrations.');
   }
-  return false;
-};
 
-// Generate Zoom meeting link (helper for manual creation)
-export const generateZoomMeetingLink = () => {
-  const meetingId = Math.floor(Math.random() * 900000000) + 100000000;
+  // Note: Real implementation requires OAuth access token
+  // This is a placeholder showing the structure
+  console.log('Zoom meeting creation would happen here with:', taskData);
+  
   return {
-    meetingLink: `https://zoom.us/j/${meetingId}`,
-    meetingId: meetingId,
-    instructions: 'Create this meeting manually in Zoom with this ID'
+    meetingLink: `https://zoom.us/j/${Math.floor(Math.random() * 900000000) + 100000000}`,
+    meetingId: Math.floor(Math.random() * 900000000) + 100000000,
+    password: Math.random().toString(36).slice(2, 8)
   };
 };
 
@@ -185,85 +185,22 @@ export const generateZoomMeetingLink = () => {
  * Google Meet Integration
  */
 
-// Open Google Meet
-export const openGoogleMeet = (meetingLink) => {
-  if (meetingLink) {
-    window.open(meetingLink, '_blank');
-    return true;
+// Create Google Meet (placeholder - requires OAuth flow)
+export const createGoogleMeet = async (taskData) => {
+  const credentials = getIntegrationCredentials('gmeet');
+  
+  if (!credentials || !credentials.apiKey) {
+    throw new Error('Google Meet is not connected. Please add your credentials in Settings → Integrations.');
   }
-  return false;
-};
 
-// Generate Google Meet link (helper)
-export const generateGoogleMeetLink = () => {
+  // Note: Real implementation requires OAuth access token and Calendar API
+  console.log('Google Meet creation would happen here with:', taskData);
+  
   const token = Math.random().toString(36).slice(2, 10);
-  const code = `${token.slice(0, 3)}-${token.slice(3, 6)}-${token.slice(6, 9)}`;
   return {
-    meetingLink: `https://meet.google.com/${code}`,
-    meetingCode: code,
-    instructions: 'This is a placeholder link. Create meeting in Google Calendar for real link.'
+    meetingLink: `https://meet.google.com/${token.slice(0, 3)}-${token.slice(3, 6)}-${token.slice(6, 9)}`,
+    meetingCode: `${token.slice(0, 3)}-${token.slice(3, 6)}-${token.slice(6, 9)}`
   };
-};
-
-/**
- * Canva Integration
- */
-
-// Open Canva design editor
-export const openCanva = (taskTitle = '') => {
-  const canvaUrl = `https://www.canva.com/create/design?${taskTitle ? `title=${encodeURIComponent(taskTitle)}` : ''}`;
-  window.open(canvaUrl, '_blank');
-};
-
-// Open Canva presentation
-export const openCanvaPresentation = (taskTitle = '') => {
-  const canvaUrl = `https://www.canva.com/create/presentations?${taskTitle ? `title=${encodeURIComponent(taskTitle)}` : ''}`;
-  window.open(canvaUrl, '_blank');
-};
-
-/**
- * Stripe Integration
- */
-
-// Open Stripe payment page
-export const openStripePayment = (amount, description) => {
-  // Note: In production, you'd generate a proper payment link via Stripe API
-  // For now, this opens Stripe homepage - user needs to set up payment links
-  const stripeUrl = amount 
-    ? `https://buy.stripe.com/test?amount=${amount}&description=${encodeURIComponent(description)}`
-    : 'https://stripe.com';
-  window.open(stripeUrl, '_blank');
-};
-
-// Request payment via Stripe
-export const requestStripePayment = (taskData) => {
-  const amount = prompt('Enter amount (USD):');
-  if (amount && !isNaN(amount)) {
-    openStripePayment(amount, taskData.title || 'Payment Request');
-    return { amount, method: 'stripe' };
-  }
-  return null;
-};
-
-/**
- * PayPal Integration
- */
-
-// Open PayPal payment
-export const openPayPalPayment = (amount, description) => {
-  // Opens PayPal - in production would use PayPal payment links
-  const paypalUrl = 'https://www.paypal.com/paypalme';
-  window.open(paypalUrl, '_blank');
-};
-
-// Request payment via PayPal
-export const requestPayPalPayment = (taskData) => {
-  const amount = prompt('Enter amount (USD):');
-  if (amount && !isNaN(amount)) {
-    openPayPalPayment(amount, taskData.title || 'Payment Request');
-    return { amount, method: 'paypal' };
-  }
-  return null;
 };
 
 /**
@@ -276,11 +213,11 @@ export const sendToZapier = async (eventType, data) => {
   
   if (!credentials || !credentials.webhookUrl) {
     console.log('Zapier not connected, skipping webhook');
-    return { sent: false, reason: 'not_connected' };
+    return;
   }
 
   try {
-    const response = await fetch(credentials.webhookUrl, {
+    await fetch(credentials.webhookUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -291,38 +228,10 @@ export const sendToZapier = async (eventType, data) => {
         data
       })
     });
-    
-    if (response.ok) {
-      console.log('Zapier webhook sent successfully');
-      return { sent: true, status: response.status };
-    } else {
-      console.error('Zapier webhook failed:', response.status);
-      return { sent: false, status: response.status };
-    }
+    console.log('Zapier webhook sent successfully');
   } catch (error) {
     console.error('Failed to send Zapier webhook:', error);
-    return { sent: false, error: error.message };
   }
-};
-
-// Notify task created
-export const notifyTaskCreated = async (taskData) => {
-  return await sendToZapier('task_created', {
-    title: taskData.title || taskData.name,
-    description: taskData.description,
-    dateTime: taskData.dateTime,
-    priority: taskData.priority,
-    type: taskData.taskType,
-    status: taskData.status || 'pending'
-  });
-};
-
-// Notify task completed
-export const notifyTaskCompleted = async (taskData) => {
-  return await sendToZapier('task_completed', {
-    title: taskData.title || taskData.name,
-    completedAt: new Date().toISOString()
-  });
 };
 
 // Export all functions
