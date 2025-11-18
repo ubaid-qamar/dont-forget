@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiPlus, FiX, FiChevronLeft, FiChevronRight, FiZap } from 'react-icons/fi';
-import { generateKeyPoints, suggestTaskPriority, isIntegrationConnected, notifyTaskCreated } from '../utils/integrations';
+import { generateKeyPoints, suggestTaskPriority, isIntegrationConnected } from '../utils/integrations';
 import './AddTask.css';
 
 // Simple Yearly Options Component
@@ -290,15 +290,6 @@ const AddTask = ({ tasks, setTasks }) => {
     setTasks(prevTasks => [...prevTasks, newTask]);
     
     console.log('Task created successfully:', newTask);
-    
-    // Send to Zapier if connected (async, don't wait)
-    notifyTaskCreated(newTask).then(result => {
-      if (result.sent) {
-        console.log('✅ Zapier notification sent successfully!');
-      }
-    }).catch(err => {
-      console.log('Zapier notification skipped or failed:', err);
-    });
     
     // Show success message
     alert('Task saved successfully!');
